@@ -10,26 +10,46 @@ top listing's quality with a locally-run LLM, and writes the results to
 
 ## Setup
 
+### 1. Install uv (free package manager)
+
 ```bash
-# 1. Install uv (free package manager)
 curl -LsSf https://astral.sh/uv/install.sh | sh
-# Windows: powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+ Windows: 
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
 
-# 2. Install Ollama (free, runs LLMs locally, no API key/cost)
-# https://ollama.com/download
 
-# 3. Pull the free local models used by this project
+### 2. Install Ollama (free, runs LLMs locally, no API key/cost)
+
+```bash
+https://ollama.com/download
+```
+
+### 3. Pull the free local models used by this project
+
+```bash
 ollama pull llama3.2   # text model — weakness report synthesis + listing quality scoring
 ollama pull llava       # vision model — was tested for image audit; see Limitations below
+```
 
-# 4. Install project dependencies
+### 4. Install project dependencies
+
+```bash
 uv sync
 uv run playwright install chromium
+```
 
-# 5. Configure environment (no real secrets needed — all defaults are free/local)
+### 5. Configure environment (no real secrets needed — all defaults are free/local)
+
+```bash
 cp .env.example .env
+```
 
-# 6. Run
+### 6. Run
+
+```bash
 uv run main.py "Mamaearth"
 ```
 
@@ -97,27 +117,27 @@ brand-intel-agent/
 ## Sample Output
 
 ======================================================================
-LEAD GEN AGENT | Brand: Mamaearth
-Started: 2026-07-12 21:38:06
-[21:38:32] discovery_agent -> found on Amazon | category: unknown, sub_category: unknown
-[21:38:45] url_extractor -> 5 amazon product URLs found
-[21:39:07] marketplace_agent -> 2 sellers, running_ads: True
-[21:39:08] discovery_agent -> category refined from product breadcrumb: Beauty -> Face Wash
-[21:40:53] listing_quality -> score: 7/10 (weighted from 5 dimensions)
-[21:42:22] weakness_agent -> 6 weakness bullets generated
-[21:42:23] excel -> saved row 5 to output.xlsx
-[21:42:23] markdown -> saved Mamaearth.md
-✅ DONE: Mamaearth
+- LEAD GEN AGENT | Brand: Mamaearth
+- Started: 2026-07-12 21:38:06
+- [21:38:32] discovery_agent -> found on Amazon | category: unknown, sub_category: unknown
+- [21:38:45] url_extractor -> 5 amazon product URLs found
+- [21:39:07] marketplace_agent -> 2 sellers, running_ads: True
+- [21:39:08] discovery_agent -> category refined from product breadcrumb: Beauty -> Face Wash
+- [21:40:53] listing_quality -> score: 7/10 (weighted from 5 dimensions)
+- [21:42:22] weakness_agent -> 6 weakness bullets generated
+- [21:42:23] excel -> saved row 5 to output.xlsx
+- [21:42:23] markdown -> saved Mamaearth.md
+- ✅ DONE: Mamaearth
 
 **Resilience test** (brand that doesn't exist on Amazon):
-[21:14:40] discovery_agent -> 'Zzqqxxnonexistentbrandxyz123' not found on Amazon.in
-[21:14:40] url_extractor -> skipped, brand not found on Amazon
-[21:14:40] marketplace_agent -> skipped, brand not found on Amazon
-[21:14:40] listing_quality -> no product data available, defaulting to score 0
-[21:15:29] weakness_agent -> 6 weakness bullets generated
-[21:15:29] excel -> saved row 4 to output.xlsx
-[21:15:29] markdown -> saved Zzqqxxnonexistentbrandxyz123.md
-✅ DONE: Zzqqxxnonexistentbrandxyz123
+- [21:14:40] discovery_agent -> 'Zzqqxxnonexistentbrandxyz123' not found on Amazon.in
+- [21:14:40] url_extractor -> skipped, brand not found on Amazon
+- [21:14:40] marketplace_agent -> skipped, brand not found on Amazon
+- [21:14:40] listing_quality -> no product data available, defaulting to score 0
+- [21:15:29] weakness_agent -> 6 weakness bullets generated
+- [21:15:29] excel -> saved row 4 to output.xlsx
+- [21:15:29] markdown -> saved Zzqqxxnonexistentbrandxyz123.md
+- ✅ DONE: Zzqqxxnonexistentbrandxyz123
 Confirms the pipeline degrades gracefully rather than crashing when a brand isn't found.
 
 **Excel output:**
